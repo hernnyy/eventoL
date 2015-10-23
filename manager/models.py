@@ -31,39 +31,61 @@ def validate_url(url):
         raise ValidationError(_('URL can only contain letters or numbers'))
 
 
-class Sede(models.Model):
-    country = models.ForeignKey(Country, verbose_name=_('Country'))
-    state = models.ForeignKey(Region, verbose_name=_('State'))
-    event_information = RichTextField(verbose_name=_('Event Information'), help_text=_('Event Information HTML'),
-                                      blank=True, null=True)
-    city = models.ForeignKey(City, verbose_name=_('City'))
-    district = models.ForeignKey(District, verbose_name=_('District'), blank=True, null=True)
-    email = models.EmailField(verbose_name=_('Email'))
+class Event(models.Model):
     name = models.CharField(_('Name'), max_length=200)
     date = models.DateField(_('Date'), help_text=_('Date of the event'))
     limit_proposal_date = models.DateField(_('Limit Proposal Date'), help_text=_('Date Limit of Talk Proposal'))
-    schedule_confirm = models.BooleanField(_('Schedule Confirm'), default=False)
-    place = models.ForeignKey(Building, verbose_name=_('Place'),
-                              help_text=_('Specific place (building) where the event is taking place'))
-    url = models.CharField(_('URL'), max_length=200, help_text=_('URL for the sede i.e. CABA'), unique=True,
+    url = models.CharField(_('URL'), max_length=200, help_text=_('URL for the event i.e. FLISoL'), unique=True,
                            db_index=True, validators=[validate_url])
-
     external_url = models.URLField(_('External URL'), blank=True, null=True, default=None, help_text=_(
         'If you want to use other page for your sede rather than eventoL\'s one, you can put the absolute url here'))
+    home_image = ImageCropField(upload_to='talks_thumbnails', verbose_name=_('Home Page Image'), blank=True, null=True,
+                                help_text=_(
+                                    'Image that is going to appear in the home page of this web for promoting the '
+                                    'talk (optional)'))
+    cropping = ImageRatioField('home_image', '700x450', size_warning=True, verbose_name=_('Cropping'),
+                               help_text=_('The image must be 700x450 px. You can crop it here.'))
+    multisede = models.BooleanField(_('Multiples sedes'), default=True)
 
     def get_absolute_url(self):
         if self.external_url:
             return self.external_url
-        return "/sede/" + self.url + '/'
+        return "/event/" + self.url + '/'
 
     def __unicode__(self):
-        return u"%s / %s / %s - %s" % (self.country, self.state, self.city, self.name)
+        return u"%s (%s)" % (self.name, self.url)
 
-    def get_geo_info(self):
-        return {"lat": self.city.location.y,
-                "lon": self.city.location.x,
-                "name": self.name,
-                "url": reverse('index', args=(self.url,))}
+    class Meta:
+        ordering = ['name']
+
+
+class Sede(models.Model):
+    event = models.ForeignKey(Event, verbose_name=_('Event'))
+    country = models.ForeignKey(Country, verbose_name=_('Country'))
+    state = models.ForeignKey(Region, verbose_name=_('State'))
+    name = models.CharField(_('Name'), max_length=200)
+    date = models.DateField(_('Date'), help_text=_('Date of the event'))
+    limit_proposal_date = models.DateField(_('Limit Proposal Date'), help_text=_('Date Limit of Talk Proposal'))
+    url = models.CharField(_('URL'), max_length=200, help_text=_('URL for the sede i.e. CABA'),
+                           validators=[validate_url])
+    external_url = models.URLField(_('External URL'), blank=True, null=True, default=None, help_text=_(
+        'If you want to use other page for your sede rather than eventoL\'s one, you can put the absolute url here'))
+    email = models.EmailField(verbose_name=_('Email'))
+    event_information = RichTextField(verbose_name=_('Event Information'), help_text=_('Event Information HTML'),
+                                      blank=True, null=True)
+    city = models.ForeignKey(City, verbose_name=_('City'))
+    district = models.ForeignKey(District, verbose_name=_('District'), blank=True, null=True)
+    place = models.ForeignKey(Building, verbose_name=_('Place'),
+                              help_text=_('Specific place (building) where the event is taking place'))
+    schedule_confirm = models.BooleanField(_('Schedule Confirm'), default=False)
+
+    def get_absolute_url(self):
+        if self.event.external_url:
+            return self.event.external_url
+        if self.external_url:
+            return self.external_url
+        event_url = self.event.get_absolute_url()
+        return event_url + "sede/" + self.url + '/'
 
     @property
     def talk_proposal_is_open(self):
@@ -72,6 +94,22 @@ class Sede(models.Model):
     @property
     def registration_is_open(self):
         return self.date >= datetime.date.today()
+
+    @classmethod
+    def from_event(cls, event):
+        sede = cls(event=event)
+        sede.date = event.date
+        sede.limit_proposal_date = event.limit_proposal_date
+        return sede
+
+    def __unicode__(self):
+        return u"%s / %s / %s - %s / %s" % (self.country, self.state, self.city, self.event.name, self.name)
+
+    def get_geo_info(self):
+        return {"lat": self.city.location.y,
+                "lon": self.city.location.x,
+                "name": self.name,
+                "url": reverse('index', args=(self.url,))}
 
     class Meta:
         ordering = ['name']
@@ -204,6 +242,12 @@ class Installer(models.Model):
     def __unicode__(self):
         return str(self.collaborator.user)
 
+    @classmethod
+    def filter_by(cls, queryset, field, value):
+        if field == 'sede':
+            return queryset.filter(collaborator__sede__pk=value)
+        return queryset
+
     class Meta:
         verbose_name = _('Installer')
         verbose_name_plural = _('Installers')
@@ -221,6 +265,12 @@ class Installation(models.Model):
 
     def __unicode__(self):
         return u"%s, %s, %s" % (self.attendee, self.hardware, self.software)
+
+    @classmethod
+    def filter_by(cls, queryset, field, value):
+        if field == 'sede':
+            return queryset.filter(attendee__sede__pk=value)
+        return queryset
 
     class Meta:
         verbose_name = _('Installation')
@@ -273,7 +323,7 @@ class TalkProposal(models.Model):
                              help_text=_("The talk's Technical level"), default='Beginner')
 
     def get_absolute_url(self):
-        return "/sede/" + self.sede.url + '/talk/detail/proposal/' + str(self.id)
+        return "/event/" + self.sede.event.url + "/sede/" + self.sede.url + '/talk/detail/proposal/' + str(self.id)
 
     def __unicode__(self):
         return self.title
@@ -306,7 +356,7 @@ class Talk(models.Model):
     end_date = models.DateTimeField(_('End Time'))
 
     def get_absolute_url(self):
-        return "/sede/" + self.talk_proposal.sede.url + '/talk/detail/talk/' + str(self.id)
+        return "/event/" + self.talk_proposal.sede.event.url + "/sede/" + self.talk_proposal.sede.url + '/talk/detail/talk/' + str(self.id)
 
     def __unicode__(self):
         return u"%s - %s (%s - %s)" % (self.talk_proposal.sede.name, self.talk_proposal.title,
@@ -328,6 +378,12 @@ class Talk(models.Model):
             'type': self.talk_proposal.type.name
         }
         return talk
+
+    @classmethod
+    def filter_by(cls, queryset, field, value):
+        if field == 'sede':
+            return queryset.filter(talk_proposal__sede__pk=value)
+        return queryset
 
     class Meta:
         verbose_name = _('Talk')
@@ -356,8 +412,8 @@ class ContactMessage(models.Model):
 class Comment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     body = models.TextField()
-    proposal = models.ForeignKey(TalkProposal)
-    user = models.ForeignKey(User)
+    proposal = models.ForeignKey(TalkProposal, verbose_name=_('TalkProposal'))
+    user = models.ForeignKey(User, verbose_name=_('User'))
 
     def __unicode__(self):
         return u"%s: %s" % (self.user, self.proposal)
@@ -370,3 +426,9 @@ class Comment(models.Model):
         if "notify" in kwargs:
             del kwargs["notify"]
         super(Comment, self).save(*args, **kwargs)
+
+    @classmethod
+    def filter_by(cls, queryset, field, value):
+        if field == 'sede':
+            return queryset.filter(proposal__sede__pk=value)
+        return queryset
