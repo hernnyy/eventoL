@@ -6,10 +6,10 @@ It is in developement state.
 
 Status
 -------
-[![Requirements Status](https://requires.io/github/GNUtn/eventoL-api/requirements.svg?branch=master)](https://requires.io/github/GNUtn/eventoL-api/requirements/?branch=master)
-[![Build Status](https://travis-ci.org/GNUtn/eventoL-api.svg)](https://travis-ci.org/GNUtn/eventoL-api)
-[![Coverage Status](https://coveralls.io/repos/GNUtn/eventoL-api/badge.svg?branch=master&service=github)](https://coveralls.io/github/GNUtn/eventoL-api?branch=master)
-[![Stories in Ready](https://badge.waffle.io/GNUtn/eventoL-api.svg?label=ready&title=Ready)](http://waffle.io/GNUtn/eventoL-api)
+[![Requirements Status](https://requires.io/github/GNUtn/eventoL/requirements.svg?branch=EventoL-2.0)](https://requires.io/github/GNUtn/eventoL/requirements/?branch=EventoL-2.0)
+[![Build Status](https://travis-ci.org/GNUtn/eventoL.svg?branch=EventoL-2.0)](https://travis-ci.org/GNUtn/eventoL)
+[![Coverage Status](https://coveralls.io/repos/github/GNUtn/eventoL/badge.svg?branch=EventoL-2.0)](https://coveralls.io/github/GNUtn/eventoL?branch=EventoL-2.0)
+[![Stories in Ready](https://badge.waffle.io/GNUtn/eventoL.svg?label=ready&title=Ready)](http://waffle.io/GNUtn/eventoL)
 
 DER
 ---
@@ -17,11 +17,11 @@ DER
 
 Documentation:
 --------------
-See [Documentation](http://gnutn.github.io/eventoL-api/)
+See [Documentation](http://eventol-docs.readthedocs.org/en/eventol-2.0/)
 
 Installation
 --------------
-See [Installation Instructions](http://gnutn.github.io/eventoL-api/installation/)
+See [Installation Instructions](http://eventol-docs.readthedocs.org/en/eventol-2.0/installation/)
 
 
   [1]: http://flisol.info/
