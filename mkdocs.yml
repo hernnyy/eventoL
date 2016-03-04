@@ -1,4 +1,4 @@
-site_name: EventoL-api
+site_name: EventoL
 theme: readthedocs
 pages:
 - Home: index.md
