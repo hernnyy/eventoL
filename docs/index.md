@@ -1,5 +1,5 @@
-EventoL-api
-===========
+EventoL
+=======
 
 EventoL is a event management software initially developed to manage [FLISoL][1] conference.
 It is in developement state.
