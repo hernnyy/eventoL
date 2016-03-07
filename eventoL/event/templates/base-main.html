@@ -1,0 +1,92 @@
+{% load staticfiles %}
+{% load filters %}
+{% load i18n %}
+<!doctype html>
+<html lang="en">
+
+  <head>
+    {% block head %}
+        <meta charset="utf-8">
+        <meta name="description" content="Responsive Bootstrap Landing Page Template">
+        <meta name="keywords" content="Bootstrap, Landing page, Template, Registration, Landing">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="author" content="Grayrids">
+            <title>Pluto - Material UI Inspired Bootstrap Template</title>
+
+        <link href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+        <!-- Font Awesome CSS -->
+        <link rel="stylesheet" href="{% static 'bower_components/font-awesome/css/font-awesome.min.css' %}" type="text/css" media="screen">
+        <!-- Include roboto.css to use the Roboto web font, material.css to include the theme and ripples.css to style the ripple effect -->
+        <link href="{% static 'css/material.min.css' %}" rel="stylesheet">
+        <link href="{% static 'css/ripples.min.css' %}" rel="stylesheet">
+        <link href="{% static 'css/main.css' %}" rel="stylesheet">
+        <link href="{% static 'css/responsive.css' %}" rel="stylesheet">
+        <link href="{% static 'css/animate.min.css' %}" rel="stylesheet">
+        {% block other-head %}{% endblock %}
+    {% endblock %}
+  </head>
+
+<body>
+{% block navbar %}
+    <div class="navbar navbar-invers menu-wrap">
+      <div class="navbar-header text-center">
+        <a class="navbar-brand logo-right" href="javascript:void(0)"><i class="mdi-image-timelapse"></i>Pluto</a>
+      </div>
+        <ul class="nav navbar-nav main-navigation">
+          <li class="active"><a href="#home">Home</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#why">why</a></li>
+          <li><a href="#screenshot">Screenshots</a></li>
+          <li><a href="#testimonial">Testimonial</a></li>
+          <li><a href="#clients">contract</a></li>
+        </ul>
+        <button class="close-button" id="close-button">Close Menu</button>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{% ifequal  message.tags 'error' %}danger{% else %}{{ message.tags }}{% endifequal %} alert-dismissible text-center"
+                 role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}
+
+{% block main-content %}{% endblock %}
+
+{% block script %}
+
+/home/fedeg/workspace/Contrib/eventoL/eventoL/static/bower_components/jquery/dist/jquery.min.js
+/home/fedeg/workspace/Contrib/eventoL/eventoL/static/bower_components/bootstrap/dist/js/bootstrap.min.js
+/home/fedeg/workspace/Contrib/eventoL/eventoL/static/bower_components/bootstrap-material-design/dist/js/ripples.min.js
+/home/fedeg/workspace/Contrib/eventoL/eventoL/static/bower_components/bootstrap-material-design/dist/js/material.min.js
+
+    <script src="{% static "js/jquery-2.1.4.min.js" %}"></script>
+    <script src="{% static "js/wow.js" %}"></script>
+    <script src="{% static "js/jquery.mmenu.min.all.js" %}"></script>
+    <script src="{% static "js/count-to.js" %}"></script>
+    <script src="{% static "js/jquery.inview.min.js" %}"></script>
+
+    <script src="{% static "js/main.js" %}"></script>
+
+    <script src="{% static "js/classie.js" %}"></script>
+    <script src="{% static "js/jquery.nav.js" %}"></script>
+    <script src="{% static "js/smooth-on-scroll.js" %}"></script>
+    <script src="{% static "js/smooth-scroll.js" %}"></script>
+    <script>
+        $(document).ready(function() {
+            // This command is used to initialize some elements and make them work properly
+            $.material.init();
+        });
+    </script>
+    {% block other-script %}{% endblock %}
+{% endblock %}
+
+</body>
+
+</html>
