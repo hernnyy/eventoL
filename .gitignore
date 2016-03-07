@@ -2,3 +2,4 @@
 eventoL-api-env/
 *.pyc
 documentation/site/
+env/
