@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+    
+    <url>
+     <loc>/</loc>
+     <lastmod>2017-03-26</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/login/</loc>
+     <lastmod>2017-03-26</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/crear-evento/</loc>
+     <lastmod>2017-03-26</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/registro-de-asistentes/</loc>
+     <lastmod>2017-03-26</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/registro-de-colaboradores/</loc>
+     <lastmod>2017-03-26</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/registro-de-instaladores/</loc>
+     <lastmod>2017-03-26</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/agregar-organizadores/</loc>
+     <lastmod>2017-03-26</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/propuestas-de-actividad/</loc>
+     <lastmod>2017-03-26</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/interfaz-de-administracion/</loc>
+     <lastmod>2017-03-26</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/cargar-una-instalacion/</loc>
+     <lastmod>2017-03-26</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/administrar-asistencia/</loc>
+     <lastmod>2017-03-26</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/administracion-personas-de-asistencia/</loc>
+     <lastmod>2017-03-26</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+</urlset>
